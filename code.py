@@ -7,8 +7,13 @@ import time
 
 NUMBER_LEDS = 10
 BRIGHTNESS = 0.1
-SLEEP_SECONDS = 0.05  # debounce delay
+UPDATES_PER_SECOND = 20
+SPEED = 1
 
+# Small values (0-10) put all lights in similar colour range
+# 25 gives the full rainbow. Higher values give random-seeming
+# colours next to each other.
+COLOUR_SPREAD = 3
 
 print("Bombs away!")
 
@@ -20,7 +25,7 @@ switch.pull = digitalio.Pull.UP
 pixels = neopixel.NeoPixel(board.NEOPIXEL, NUMBER_LEDS, brightness=BRIGHTNESS)
 
 
-def wheel(pos):
+def int_to_rgb(pos):
     """Map a single integer in the range [0, 255] to a colour in the rainbow,
     linearly interpolating from pure red (0) to pure green (85) to pure blue (170)
     and back to red.
@@ -39,16 +44,16 @@ def wheel(pos):
 i = 0
 while True:
     if switch.value:
-        pixels.fill(wheel(i))
+        pixels.fill(int_to_rgb(i))
     else:
-        positions = [(i + 8 * j) % 255 for j in range(10)]
-        colours = [wheel(pos) for pos in positions]
+        positions = [(i + COLOUR_SPREAD * j) % 255 for j in range(NUMBER_LEDS)]
+        colours = [int_to_rgb(pos) for pos in positions]
         pixels[:] = colours
 
     # print(colours[0])  # Uncomment this to see a print out of the colours in "Plotter" of Mu Editor
 
-    time.sleep(SLEEP_SECONDS)
-    i = (i + 1) % 255
+    time.sleep(1 / UPDATES_PER_SECOND)
+    i = (i + SPEED) % 255
 
 
 print("Well this is awkward")
