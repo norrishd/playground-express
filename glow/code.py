@@ -1,29 +1,30 @@
-
+"""Create a gentle strobing rainbow glow."""
 import board
 import digitalio
 import neopixel
 import time
 
 
-print("Bombs away!")
+NUMBER_LEDS = 10
+BRIGHTNESS = 0.1
+SLEEP_SECONDS = 0.05  # debounce delay
 
-# Create a pointer to the little "reset" red LED
-led = digitalio.DigitalInOut(board.LED)  # D13 == LED
-led.direction = digitalio.Direction.OUTPUT
+
+print("Bombs away!")
 
 # The slider/switch
 switch = digitalio.DigitalInOut(board.SLIDE_SWITCH)  # D7
 switch.direction = digitalio.Direction.INPUT
 switch.pull = digitalio.Pull.UP
 
-pixels = neopixel.NeoPixel(board.NEOPIXEL, 10, brightness=0.10)
-# pixels.brightness = 0.15
+pixels = neopixel.NeoPixel(board.NEOPIXEL, NUMBER_LEDS, brightness=BRIGHTNESS)
 
 
 def wheel(pos):
-    """Map a single int in the range [0, 255] to a colour cycling through the rainbow."""
-    # Input a value 0 to 255 to get a color value.
-    # The colours are a transition r - g - b - back to r.
+    """Map a single integer in the range [0, 255] to a colour in the rainbow,
+    linearly interpolating from pure red (0) to pure green (85) to pure blue (170)
+    and back to red.
+    """
     if pos < 0 or pos > 255:
         return 0, 0, 0
     if pos < 85:
@@ -37,19 +38,17 @@ def wheel(pos):
 
 i = 0
 while True:
-    if switch.value:  # Red LED on (True) when switch is to the right (False)
-        led.value = False
-        # led.value = not led.value
-        pixels[:] = [(0, 0, 0)] * len(pixels)
+    if switch.value:
         pixels.fill(wheel(i))
     else:
-        led.value = False
         positions = [(i + 8 * j) % 255 for j in range(10)]
         colours = [wheel(pos) for pos in positions]
-        # print(colours[0])
         pixels[:] = colours
-    time.sleep(0.1)  # debounce delay
-    i = (i + 2) % 255
+
+    # print(colours[0])  # Uncomment this to see a print out of the colours in "Plotter" of Mu Editor
+
+    time.sleep(SLEEP_SECONDS)
+    i = (i + 1) % 255
 
 
 print("Well this is awkward")
