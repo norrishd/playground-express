@@ -5,11 +5,10 @@ Reference: https://mason.gmu.edu/~rhanson/equatalk.html
 import math
 import random
 import time
-from typing import Optional
 
 from adafruit_circuitplayground.express import cpx
 
-# Average time a person talks
+# Average and minimum time in seconds between timer triggering
 MEAN_TRIGGER_INTERVAL = 60
 MIN_TRIGGER_INTERVAL = 5
 
@@ -18,6 +17,7 @@ SAMPLE_RATE = 200
 REFRESH_RATE = 1 / SAMPLE_RATE
 PULSE_RATE = 2 / 3
 MAX_BRIGHTNESS = 0.5
+
 # Time in secs for linear increase/decrease in brightness before/after a trigger
 TRIGGER_WINDOW = 3
 
@@ -41,7 +41,8 @@ def wheel(pos):
 def get_next_trigger_time(now):
     """Randomly select a time for the next trigger to go off.
 
-    Time is sampled from a geometric distribution, i.e. the number X of Bernoulli trials needed to get one success.
+    Time is sampled from a geometric distribution, i.e. the number X of Bernoulli trials needed to
+    get one success.
 
     Cumulative distribution function:
 

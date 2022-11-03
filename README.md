@@ -17,7 +17,8 @@ first.
 
 ## Scripts
 
-| Script       | Description                                                                 |
-| ------------ | --------------------------------------------------------------------------- |
-| equatalk     | Implementation of "EquaTalk" - https://mason.gmu.edu/~rhanson/equatalk.html |
-| rainbow_glow | A soft cycling through the rainbow with customisable LED colour spread      |
+| Script             | Description                                                                 |
+| ------------------ | --------------------------------------------------------------------------- |
+| capacitative_touch | Simple demonstration/mapping of the capacitative touch pins                 |
+| equatalk           | Implementation of "EquaTalk" - https://mason.gmu.edu/~rhanson/equatalk.html |
+| rainbow_glow       | A soft cycling through the rainbow with customisable LED colour spread      |
