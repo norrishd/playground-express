@@ -1,10 +1,12 @@
-"""Create a gentle strobing rainbow glow."""
+"""Create a gentle strobing rainbow glow.
+
+The A and B buttons control the spread of the light spectrum.
+"""
 import time
 
 import board
 import digitalio
 import neopixel
-
 
 NUMBER_LEDS = 10
 BRIGHTNESS = 0.1
@@ -14,14 +16,21 @@ SPEED = 1  # How fast to progress through the rainbow
 # Small values (0-10) put all lights in similar colour range
 # 25 gives the full rainbow. Higher values give random-seeming
 # colours next to each other.
-COLOUR_SPREAD = 5
-
-print("Bombs away!")
+colour_spread = 5
 
 # The slider/switch
 switch = digitalio.DigitalInOut(board.SLIDE_SWITCH)  # D7
 switch.direction = digitalio.Direction.INPUT
 switch.pull = digitalio.Pull.UP
+
+# The buttons
+button_a = digitalio.DigitalInOut(board.BUTTON_A)  # D4
+button_a.direction = digitalio.Direction.INPUT
+button_a.pull = digitalio.Pull.DOWN
+
+button_b = digitalio.DigitalInOut(board.BUTTON_B)  # D5
+button_b.direction = digitalio.Direction.INPUT
+button_b.pull = digitalio.Pull.DOWN
 
 pixels = neopixel.NeoPixel(board.NEOPIXEL, NUMBER_LEDS, brightness=BRIGHTNESS)
 
@@ -43,14 +52,27 @@ def int_to_rgb(pos):
 
 i = 0
 next_update = time.monotonic()
+button_a_prev, button_b_prev = button_a.value, button_b.value
 while True:
     next_update += 1 / UPDATES_PER_SECOND
+
     if switch.value:
         pixels.fill(int_to_rgb(i))
     else:
-        positions = [(i + COLOUR_SPREAD * j) % 255 for j in range(NUMBER_LEDS)]
+        if button_a.value and not button_a_prev:
+            colour_spread = max(0, colour_spread - 1)
+            button_a_prev = True
+        elif button_b.value and not button_b_prev:
+            colour_spread += 1
+            button_b_prev = True
+
+        button_a_prev, button_b_prev = button_a.value, button_b.value
+
+        positions = [(i + colour_spread * j) % 255 for j in range(NUMBER_LEDS)]
         colours = [int_to_rgb(pos) for pos in positions]
         pixels[:] = colours
 
-    time.sleep(min(next_update, time.monotonic(), 0))
+    sleep_for = max(next_update - time.monotonic(), 0)
+    time.sleep(sleep_for)
+
     i = (i + SPEED) % 255
