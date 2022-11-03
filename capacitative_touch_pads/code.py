@@ -1,5 +1,4 @@
 """A script to demo how to use the capacitative touch pads."""
-
 from adafruit_circuitplayground.express import cpx
 
 

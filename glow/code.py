@@ -26,9 +26,8 @@ pixels = neopixel.NeoPixel(board.NEOPIXEL, NUMBER_LEDS, brightness=BRIGHTNESS)
 
 
 def int_to_rgb(pos):
-    """Map a single integer in the range [0, 255] to a colour in the rainbow,
-    linearly interpolating from pure red (0) to pure green (85) to pure blue (170)
-    and back to red.
+    """Map a single integer in the range [0, 255] to a colour in the rainbow, linearly interpolating
+    from pure red (0) to pure green (85) to pure blue (170) and back to red.
     """
     if pos < 0 or pos > 255:
         return 0, 0, 0
@@ -50,10 +49,5 @@ while True:
         colours = [int_to_rgb(pos) for pos in positions]
         pixels[:] = colours
 
-    # print(colours[0])  # Uncomment this to see a print out of the colours in "Plotter" of Mu Editor
-
     time.sleep(1 / UPDATES_PER_SECOND)
     i = (i + SPEED) % 255
-
-
-print("Well this is awkward")
