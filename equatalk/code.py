@@ -5,6 +5,7 @@ Reference: https://mason.gmu.edu/~rhanson/equatalk.html
 import math
 import random
 import time
+from typing import Optional
 
 from adafruit_circuitplayground.express import cpx
 
@@ -70,8 +71,8 @@ def solve_linear_equation(x1: float, y1: float, x2: float, y2: float):
 
 def get_next_brightness(
     now: float,
-    gradient: Optional[float] = None,
-    intercept: Optional[float] = None,
+    gradient=None,
+    intercept=None,
 ):
     """Return the next brightness value.
 
