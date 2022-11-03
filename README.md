@@ -2,7 +2,9 @@
 
 _Circuit Python scripts to run on an Adafruit Circuit Playground Express_
 
-![Circuit Playground Express](https://cdn-learn.adafruit.com/guides/cropped_images/000/001/280/medium640/thumb.jpg?1515090018)
+<p align="center">
+    <img src="https://cdn-learn.adafruit.com/guides/cropped_images/000/001/280/medium640/thumb.jpg?1515090018" alt="Circuit Playground Express" width="400"/>
+</p>
 
 ## Setup
 
