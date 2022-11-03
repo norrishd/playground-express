@@ -1,19 +1,20 @@
 """Create a gentle strobing rainbow glow."""
+import time
+
 import board
 import digitalio
 import neopixel
-import time
 
 
 NUMBER_LEDS = 10
 BRIGHTNESS = 0.1
 UPDATES_PER_SECOND = 20
-SPEED = 1
+SPEED = 1  # How fast to progress through the rainbow
 
 # Small values (0-10) put all lights in similar colour range
 # 25 gives the full rainbow. Higher values give random-seeming
 # colours next to each other.
-COLOUR_SPREAD = 3
+COLOUR_SPREAD = 5
 
 print("Bombs away!")
 
@@ -41,7 +42,9 @@ def int_to_rgb(pos):
 
 
 i = 0
+next_update = time.monotonic()
 while True:
+    next_update += 1 / UPDATES_PER_SECOND
     if switch.value:
         pixels.fill(int_to_rgb(i))
     else:
@@ -49,5 +52,5 @@ while True:
         colours = [int_to_rgb(pos) for pos in positions]
         pixels[:] = colours
 
-    time.sleep(1 / UPDATES_PER_SECOND)
+    time.sleep(min(next_update, time.monotonic(), 0))
     i = (i + SPEED) % 255
